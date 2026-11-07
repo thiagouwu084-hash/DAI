@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InclusiDAI - Red de Acompañamiento Escolar</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Fuentes Accesibles (Lexend & Atkinson Hyperlegible para Dislexia) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Lexend', 'Atkinson Hyperlegible', 'sans-serif'],
+            dyslexic: ['Atkinson Hyperlegible', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#2563eb',
+              600: '#1d4ed8',
+              700: '#1e40af',
+              800: '#1e3a8a',
+              900: '#172554',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos de Accesibilidad Visual y Contraste */
+    .theme-normal {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    .theme-dark-contrast {
+      background-color: #111827 !important;
+      color: #f9fafb !important;
+    }
+    .theme-dark-contrast .bg-white, 
+    .theme-dark-contrast .bg-slate-50,
+    .theme-dark-contrast .bg-blue-50,
+    .theme-dark-contrast .bg-emerald-50,
+    .theme-dark-contrast .bg-sky-50 {
+      background-color: #1f2937 !important;
+      color: #f9fafb !important;
+      border-color: #374151 !important;
+    }
+
+    .theme-yellow-contrast {
+      background-color: #fffbeb !important;
+      color: #000000 !important;
+    }
+    .theme-yellow-contrast .bg-white,
+    .theme-yellow-contrast .bg-slate-50,
+    .theme-yellow-contrast .bg-blue-50,
+    .theme-yellow-contrast .bg-emerald-50,
+    .theme-yellow-contrast .bg-sky-50 {
+      background-color: #fef08a !important;
+      color: #000000 !important;
+      border-color: #000000 !important;
+    }
+    .theme-yellow-contrast button, 
+    .theme-yellow-contrast input, 
+    .theme-yellow-contrast select, 
+    .theme-yellow-contrast textarea {
+      border: 2px solid #000000 !important;
+      color: #000000 !important;
+    }
+
+    .theme-dyslexia {
+      font-family: 'Atkinson Hyperlegible', sans-serif !important;
+      letter-spacing: 0.04em !important;
+      word-spacing: 0.12em !important;
+      line-height: 1.8 !important;
+      background-color: #f4f1ea !important;
+      color: #1c1917 !important;
+    }
+
+    /* Fuentes Dinámicas */
+    .font-size-sm { font-size: 0.875rem; }
+    .font-size-md { font-size: 1rem; }
+    .font-size-lg { font-size: 1.15rem; }
+    .font-size-xl { font-size: 1.3rem; }
+
+    /* Animación Pausa Activa */
+    @keyframes pulseBreathing {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.25); opacity: 1; }
+    }
+    .animate-breathing {
+      animation: pulseBreathing 6s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="theme-normal font-size-md flex flex-col min-h-screen transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- BARRA SUPERIOR DE ACCESIBILIDAD Y RED      -->
+  <!-- ========================================== -->
+  <header class="bg-brand-700 text-white shadow-lg sticky top-0 z-40">
+    <!-- Sub-Barra de Accesibilidad Global -->
+    <div class="bg-brand-900 px-4 py-2 text-xs md:text-sm border-b border-brand-600 flex flex-wrap justify-between items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
+        <span class="font-semibold text-blue-200 flex items-center gap-1">
+          <i class="fa-solid fa-universal-access"></i> Accesibilidad:
+        </span>
+        
+        <!-- Controles de Tamaño de Texto -->
+        <div class="flex items-center bg-brand-800 rounded-lg p-1 border border-brand-600">
+          <span class="text-xs px-1 text-blue-200">Texto:</span>
+          <button onclick="setFontSize('sm')" title="Fuente Pequeña" class="px-2 py-0.5 hover:bg-brand-600 rounded font-bold">A-</button>
+          <button onclick="setFontSize('md')" title="Fuente Normal" class="px-2 py-0.5 hover:bg-brand-600 rounded font-bold">A</button>
+          <button onclick="setFontSize('lg')" title="Fuente Grande" class="px-2 py-0.5 hover:bg-brand-600 rounded font-bold">A+</button>
+          <button onclick="setFontSize('xl')" title="Fuente Extra Grande" class="px-2 py-0.5 hover:bg-brand-600 rounded font-bold">A++</button>
+        </div>
+
+        <!-- Contraste Visual -->
+        <div class="flex items-center gap-1">
+          <button onclick="setTheme('normal')" class="px-2 py-1 rounded bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-white shadow-sm">Normal</button>
+          <button onclick="setTheme('dark-contrast')" class="px-2 py-1 rounded bg-gray-900 text-yellow-300 text-xs font-semibold border border-yellow-400 hover:bg-black">Oscuro</button>
+          <button onclick="setTheme('yellow-contrast')" class="px-2 py-1 rounded bg-yellow-300 text-black text-xs font-semibold border border-black hover:bg-yellow-400">Baja Visión</button>
+          <button onclick="setTheme('dyslexia')" class="px-2 py-1 rounded bg-amber-100 text-amber-900 text-xs font-semibold hover:bg-amber-200">Lectura Fácil</button>
+        </div>
+      </div>
+
+      <!-- Lectura TTS en Voz Alta y Estado Auth -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-1">
+          <i class="fa-solid fa-volume-high text-blue-300"></i>
+          <select id="voiceSelect" class="bg-brand-800 text-white text-xs rounded border border-brand-600 px-2 py-1 max-w-[130px] md:max-w-[180px] truncate" title="Seleccionar Voz de Lectura"></select>
+          <button onclick="stopSpeech()" id="btnStopVoice" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs font-bold hidden">
+            <i class="fa-solid fa-square"></i> Detener
+          </button>
+        </div>
+
+        <!-- Tag de Conexión Firebase -->
+        <div class="hidden sm:flex items-center gap-1.5 bg-brand-800/80 px-2.5 py-1 rounded-lg border border-brand-600 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="userStatusTag" class="font-mono text-blue-200 truncate max-w-[130px]">Conectando...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Encabezado Principal, Selector de Rol y SELECTOR DE ESTUDIANTE ACTIVO -->
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 bg-white text-brand-700 rounded-2xl flex items-center justify-center font-black text-2xl shadow-md">
+          <i class="fa-solid fa-hands-holding-child"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl md:text-2xl font-bold tracking-tight">InclusiDAI</h1>
+            <span class="bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Red Multiusuario</span>
+          </div>
+          <p class="text-xs text-blue-200">Plataforma Pedagógica para Inclusión Escolar</p>
+        </div>
+      </div>
+
+      <!-- SECTORES DE SELECCIÓN EN TIEMPO REAL -->
+      <div class="flex flex-wrap items-center gap-2 bg-brand-800/90 p-2 rounded-2xl border border-brand-600 w-full md:w-auto justify-between md:justify-end">
+        
+        <!-- SELECTOR GLOBAL DE ESTUDIANTE -->
+        <div class="flex items-center gap-1.5 bg-brand-900/80 px-2.5 py-1 rounded-xl border border-brand-600">
+          <i class="fa-solid fa-user-graduate text-amber-400 text-xs"></i>
+          <span class="text-xs font-bold text-blue-100">Alumno:</span>
+          <select id="globalStudentSelector" onchange="switchActiveStudent(this.value)" class="bg-white text-slate-800 text-xs font-bold px-2.5 py-1 rounded-lg outline-none border border-slate-300 max-w-[160px] truncate">
+            <option value="ALL">🌐 Todos los Alumnos</option>
+          </select>
+          <button id="btnOpenAddStudent" onclick="openStudentModal()" title="Agregar Nuevo Estudiante a la Red" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-lg flex items-center gap-1">
+            <i class="fa-solid fa-user-plus"></i> <span class="hidden sm:inline">Nuevo</span>
+          </button>
+          <button id="btnManageStudents" onclick="openManageStudentsModal()" title="Gestionar y Eliminar Alumnos" class="px-2 py-1 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-lg flex items-center gap-1">
+            <i class="fa-solid fa-users-gear"></i> <span class="hidden sm:inline">Gestionar</span>
+          </button>
+        </div>
+
+        <!-- SELECTOR DE ROL -->
+        <div class="flex items-center gap-2 border-l border-brand-600 pl-2">
+          <span class="text-xs font-bold text-blue-200 flex items-center gap-1">
+            <i class="fa-solid fa-user-gear"></i> Rol:
+          </span>
+          <select id="roleSelector" onchange="switchRole(this.value)" class="bg-white text-slate-800 text-xs font-bold px-2.5 py-1 rounded-lg outline-none border border-slate-300">
+            <option value="dai">👩‍🏫 Docente DAI</option>
+            <option value="profesor">👨‍🏫 Prof. Materia</option>
+            <option value="estudiante">👦 Estudiante / Familia</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navegación por Pestañas -->
+    <div class="bg-brand-800/50 border-t border-brand-600">
+      <div class="max-w-7xl mx-auto px-4 flex flex-wrap gap-1 py-1.5">
+        <button onclick="switchTab('muro')" id="tab-muro" class="nav-tab px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 transition bg-white text-brand-700 shadow-sm">
+          <i class="fa-solid fa-comments text-brand-600"></i> Cuaderno de Enlace
+        </button>
+        <button onclick="switchTab('agenda')" id="tab-agenda" class="nav-tab px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 transition text-white hover:bg-brand-700">
+          <i class="fa-solid fa-calendar-day text-emerald-400"></i> Agenda Visual
+        </button>
+        <button onclick="switchTab('adaptador')" id="tab-adaptador" class="nav-tab px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 transition text-white hover:bg-brand-700">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-400"></i> Adaptador Lectura Fácil
+        </button>
+        <button onclick="switchTab('ppi')" id="tab-ppi" class="nav-tab px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 transition text-white hover:bg-brand-700">
+          <i class="fa-solid fa-users-rectangle text-sky-300"></i> Red de Apoyos y PPI
+        </button>
+        <button onclick="switchTab('pausa')" id="tab-pausa" class="nav-tab px-3 py-2 rounded-xl text-xs md:text-sm font-semibold flex items-center gap-2 transition text-white hover:bg-brand-700">
+          <i class="fa-solid fa-spa text-purple-300"></i> Pausa Activa & Reloj
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notificación Flotante (Toast) -->
+  <div id="toastNotification" class="fixed bottom-5 right-5 z-50 transform transition-all duration-300 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border border-slate-700 max-w-sm pointer-events-none translate-y-20 opacity-0">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-xl"></i>
+    <span id="toastMessage" class="text-sm font-medium">Notificación</span>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+    <!-- Banner Informativo del Alumno y Rol Activo -->
+    <div id="roleBanner" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-sky-900 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div id="roleBadgeIcon" class="w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg shadow">
+          <i class="fa-solid fa-user-tie"></i>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase font-extrabold text-sky-700 tracking-wider block">Vista Activa del Sistema</span>
+          <h2 id="roleBannerTitle" class="text-sm md:text-base font-bold text-slate-800">Docente DAI - Control de Adecuaciones y Gestión</h2>
+        </div>
+      </div>
+
+      <!-- Tarjeta del Alumno Seleccionado -->
+      <div class="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-sky-200 shadow-sm w-full sm:w-auto justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span class="text-xs text-slate-500 font-medium">Estudiante Activo:</span>
+          <strong id="activeStudentTag" class="text-xs md:text-sm text-brand-700 font-bold">🌐 Todos los Alumnos</strong>
+        </div>
+        <span id="activeStudentGradeTag" class="text-[10px] bg-slate-100 font-bold text-slate-600 px-2 py-0.5 rounded-md">General</span>
+      </div>
+    </div>
+
+
+    <!-- ======================================================== -->
+    <!-- PESTAÑA 1: CUADERNO DE ENLACE DIGITAL EN TIEMPO REAL    -->
+    <!-- ======================================================== -->
+    <section id="sec-muro" class="tab-content block space-y-6">
+      
+      <!-- Panel de Publicación para Docentes -->
+      <div id="teacherPublishPanel" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-brand-600"></i> Publicar Nota en el Cuaderno de Enlace
+          </h3>
+          <span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-lg">Sincronización Inmediata</span>
+        </div>
+
+        <form id="postForm" onsubmit="handleCreatePost(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label for="postCategory" class="block text-xs font-bold text-slate-700 mb-1">Categoría:</label>
+              <select id="postCategory" class="w-full p-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="Lectura Fácil">📖 Lectura Fácil / Consigna</option>
+                <option value="Tareas">📝 Recordatorio de Tarea</option>
+                <option value="Observación">💡 Observación Diaria</option>
+                <option value="Apoyo PPI">⭐ Apoyo Pedagógico / PPI</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="postStudentTarget" class="block text-xs font-bold text-slate-700 mb-1">Asignar a Alumno:</label>
+              <select id="postStudentTarget" class="w-full p-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="ALL">🌐 Todos los Alumnos</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="postImportance" class="block text-xs font-bold text-slate-700 mb-1">Nivel de Prioridad:</label>
+              <select id="postImportance" class="w-full p-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-brand-500">
+                <option value="normal">Normal</option>
+                <option value="alta">⚠️ Prioritario / Relevante</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label for="postContent" class="block text-xs font-bold text-slate-700 mb-1">Contenido de la Anotación / Consigna Adaptada:</label>
+            <textarea id="postContent" rows="3" required class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand-500" placeholder="Escribe el mensaje claro y directo para que la familia o estudiante lo consulten..."></textarea>
+          </div>
+
+          <div class="flex justify-between items-center pt-1">
+            <button type="button" onclick="speakText(document.getElementById('postContent').value)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5">
+              <i class="fa-solid fa-volume-high text-brand-600"></i> Escuchar Borrador
+            </button>
+            <button type="submit" class="px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs shadow-md flex items-center gap-2 transition">
+              <i class="fa-solid fa-paper-plane"></i> Publicar en la Red
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Filtros del Muro Colaborativo -->
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200">
+        <div class="flex items-center gap-2">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+            <i class="fa-solid fa-newspaper text-emerald-600"></i> Publicaciones en el Cuaderno
+          </h3>
+          <span id="postsCountTag" class="text-xs bg-slate-100 font-bold text-slate-600 px-2 py-0.5 rounded-full">0</span>
+        </div>
+
+        <!-- Filtro de Categoría -->
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <button onclick="filterWallPosts('todos')" class="filter-btn px-3 py-1 rounded-xl bg-slate-800 text-white font-bold shadow-sm">Todos</button>
+          <button onclick="filterWallPosts('Lectura Fácil')" class="filter-btn px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Lectura Fácil</button>
+          <button onclick="filterWallPosts('Tareas')" class="filter-btn px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Tareas</button>
+          <button onclick="filterWallPosts('Observación')" class="filter-btn px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Observaciones</button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Publicaciones -->
+      <div id="postsWallContainer" class="space-y-4"></div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- PESTAÑA 2: AGENDA VISUAL COMPARTIDA                      -->
+    <!-- ======================================================== -->
+    <section id="sec-agenda" class="tab-content space-y-6 hidden">
+      <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-emerald-600"></i> Agenda Visual Interactiva
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">Secuencia de actividades de la jornada asociadas al alumno seleccionado.</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button id="btnAddAgendaTaskBtn" onclick="openAgendaModal()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-plus"></i> Añadir Actividad
+            </button>
+          </div>
+        </div>
+
+        <!-- Barra de Progreso de la Jornada -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-6">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700 mb-1.5">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-emerald-600"></i> Progreso de Tareas del Día:</span>
+            <span id="agendaProgressPercent">0% Completado</span>
+          </div>
+          <div class="w-full bg-slate-200 h-3 rounded-full overflow-hidden">
+            <div id="agendaProgressBar" class="bg-emerald-500 h-full w-0 transition-all duration-500"></div>
+          </div>
+        </div>
+
+        <!-- Grid de Actividades de la Agenda -->
+        <div id="agendaItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+
+        <div id="emptyAgendaState" class="text-center py-12 border-2 border-dashed border-slate-200 rounded-2xl">
+          <i class="fa-solid fa-calendar-xmark text-4xl text-slate-300 mb-2"></i>
+          <p class="text-sm font-semibold text-slate-600">No hay actividades en la agenda para este alumno.</p>
+          <p class="text-xs text-slate-400 mt-1">Presiona "Añadir Actividad" para crear la secuencia visual.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- PESTAÑA 3: ADAPTADOR LECTURA FÁCIL                       -->
+    <!-- ======================================================== -->
+    <section id="sec-adaptador" class="tab-content space-y-6 hidden">
+      <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Asistente de Lectura Fácil
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">Simplifica consignas extensas en pasos accesibles para los alumnos.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div>
+              <label for="adaptInputText" class="block text-xs font-bold text-slate-700 mb-1">Texto Original de Clase:</label>
+              <textarea id="adaptInputText" rows="6" class="w-full p-3 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-amber-500" placeholder="Pega aquí el texto o consigna del examen..."></textarea>
+            </div>
+
+            <div>
+              <span class="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-2">Modo de Adaptación Inclusiva:</span>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="runAdaptation('steps')" class="p-2.5 bg-blue-50 hover:bg-blue-100 text-brand-700 border border-blue-200 rounded-xl text-xs font-semibold flex items-center gap-2">
+                  <i class="fa-solid fa-list-ol text-base"></i> Pasos Numerados
+                </button>
+                <button onclick="runAdaptation('vocab')" class="p-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-semibold flex items-center gap-2">
+                  <i class="fa-solid fa-spell-check text-base"></i> Vocabulario Directo
+                </button>
+                <button onclick="runAdaptation('verbs')" class="p-2.5 bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 rounded-xl text-xs font-semibold flex items-center gap-2">
+                  <i class="fa-solid fa-highlighter text-base"></i> Resaltar Acciones
+                </button>
+                <button onclick="runAdaptation('simple')" class="p-2.5 bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-200 rounded-xl text-xs font-semibold flex items-center gap-2">
+                  <i class="fa-solid fa-align-left text-base"></i> Oraciones Cortas
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="text-xs font-bold text-slate-700 flex items-center gap-2">
+                <i class="fa-solid fa-circle-check text-emerald-500"></i> Vista Previa Adaptada
+              </h3>
+              <div class="flex gap-1">
+                <button onclick="speakText(document.getElementById('adaptOutputArea').innerText)" class="px-2.5 py-1 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-volume-high"></i> Escuchar
+                </button>
+                <button onclick="sendAdaptedToPost()" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-paper-plane"></i> Publicar en Muro
+                </button>
+              </div>
+            </div>
+
+            <div id="adaptOutputArea" contenteditable="true" class="flex-grow min-h-[220px] p-3 bg-white border border-slate-300 rounded-xl text-sm leading-relaxed outline-none focus:ring-2 focus:ring-amber-500 overflow-y-auto"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- PESTAÑA 4: RED DE APOYOS Y FICHAS PPI COMPARTIDAS       -->
+    <!-- ======================================================== -->
+    <section id="sec-ppi" class="tab-content space-y-6 hidden">
+      <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+              <i class="fa-solid fa-users-rectangle text-sky-600"></i> Red de Apoyos y Acuerdos PPI
+            </h2>
+            <p class="text-xs md:text-sm text-slate-500">Planes Pedagógicos Individuales (PPI) registrados en el sistema.</p>
+          </div>
+          <button onclick="openPPIModal()" id="btnCreatePPISheet" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-user-plus"></i> Registrar Ficha PPI
+          </button>
+        </div>
+
+        <div id="ppiCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </div>
+    </section>
+
+
+    <!-- ======================================================== -->
+    <!-- PESTAÑA 5: PAUSA ACTIVA Y RELOJ SENSORIAL DE AUTORREGULACIÓN -->
+    <!-- ======================================================== -->
+    <section id="sec-pausa" class="tab-content space-y-6 hidden">
+      <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 text-center max-w-2xl mx-auto space-y-6">
+        <div>
+          <h2 class="text-xl font-bold text-slate-800 flex items-center justify-center gap-2">
+            <i class="fa-solid fa-spa text-purple-600"></i> Pausa Activa & Autorregulación Sensorial
+          </h2>
+          <p class="text-xs md:text-sm text-slate-500 mt-1">Herramienta visual de apoyo para momentos de sobrecarga o descanso de atención.</p>
+        </div>
+
+        <!-- Reloj Visual Circular -->
+        <div class="relative w-48 h-48 mx-auto flex items-center justify-center">
+          <div id="sensoryCircle" class="absolute inset-0 rounded-full border-8 border-purple-200 bg-purple-50 flex items-center justify-center transition-all duration-300"></div>
+          <div class="relative z-10 font-mono text-3xl font-black text-purple-900" id="sensoryTimerDisplay">03:00</div>
+        </div>
+
+        <!-- Control del Temporizador -->
+        <div class="flex justify-center items-center gap-2">
+          <button onclick="setSensoryPreset(1)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">1 min</button>
+          <button onclick="setSensoryPreset(3)" class="px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-xl text-xs font-bold">3 min</button>
+          <button onclick="setSensoryPreset(5)" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">5 min</button>
+        </div>
+
+        <div class="flex justify-center gap-3">
+          <button id="btnStartSensory" onclick="toggleSensoryTimer()" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-2">
+            <i class="fa-solid fa-play"></i> Iniciar Pausa
+          </button>
+          <button onclick="resetSensoryTimer()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">
+            <i class="fa-solid fa-rotate-right"></i> Reiniciar
+          </button>
+        </div>
+
+        <!-- Guía de Respiración 3-3-3 -->
+        <div class="p-4 bg-purple-50/60 border border-purple-100 rounded-2xl text-xs space-y-2">
+          <strong class="text-purple-900 font-bold flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-wind"></i> Guía Guiada de Respiración (3-3-3):
+          </strong>
+          <div class="grid grid-cols-3 gap-2 font-medium text-purple-800">
+            <div class="p-2 bg-white rounded-xl border border-purple-200">1. Inhala suavemente (3s)</div>
+            <div class="p-2 bg-white rounded-xl border border-purple-200">2. Mantén el aire (3s)</div>
+            <div class="p-2 bg-white rounded-xl border border-purple-200">3. Exhala despacio (3s)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- MODALES DE REGISTRO                                      -->
+  <!-- ======================================================== -->
+
+  <!-- Modal 1: Agregar Nuevo Estudiante -->
+  <div id="modalStudent" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-emerald-600"></i> Registrar Nuevo Estudiante
+        </h3>
+        <button onclick="closeStudentModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <form id="studentForm" onsubmit="handleCreateStudent(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="studentFirstName" class="block text-xs font-bold text-slate-700 mb-1">Nombre:</label>
+            <input type="text" id="studentFirstName" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Ej: Mateo">
+          </div>
+          <div>
+            <label for="studentLastName" class="block text-xs font-bold text-slate-700 mb-1">Apellido:</label>
+            <input type="text" id="studentLastName" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Ej: González">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="studentGrade" class="block text-xs font-bold text-slate-700 mb-1">Grado / Nivel:</label>
+            <input type="text" id="studentGrade" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Ej: 4° Grado">
+          </div>
+          <div>
+            <label for="studentShift" class="block text-xs font-bold text-slate-700 mb-1">Turno Escolar:</label>
+            <select id="studentShift" class="w-full p-2.5 border border-slate-300 rounded-xl text-xs font-semibold outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Mañana">Turno Mañana</option>
+              <option value="Tarde">Turno Tarde</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Apoyos Específicos Requeridos:</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="studentSupportCheck" value="Visual" class="rounded text-emerald-600"> Apoyo Visual
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="studentSupportCheck" value="Lectura Fácil" class="rounded text-emerald-600"> Lectura Fácil
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="studentSupportCheck" value="Sensorial" class="rounded text-emerald-600"> Pausa Sensorial
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="studentSupportCheck" value="Audio/TTS" class="rounded text-emerald-600"> Audio en Voz Alta
+            </label>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3">
+          <button type="button" onclick="closeStudentModal()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow">Guardar Estudiante</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Añadir Actividad a la Agenda -->
+  <div id="modalAgendaTask" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-clock text-emerald-600"></i> Nueva Actividad para Agenda
+        </h3>
+        <button onclick="closeAgendaModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <form id="agendaForm" onsubmit="handleCreateAgendaTask(event)" class="space-y-4">
+        <div>
+          <label for="taskTitle" class="block text-xs font-bold text-slate-700 mb-1">Nombre de la Actividad:</label>
+          <input type="text" id="taskTitle" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Ej: Lectura Adaptada de Ciencias">
+        </div>
+
+        <div>
+          <label for="taskTime" class="block text-xs font-bold text-slate-700 mb-1">Horario / Módulo:</label>
+          <input type="text" id="taskTime" class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Ej: 09:00 a 09:45 hs">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Seleccionar Ícono Visual:</label>
+          <div class="grid grid-cols-5 gap-2" id="agendaIconGrid">
+            <button type="button" onclick="selectAgendaIcon('fa-book', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center border-emerald-500 bg-emerald-50"><i class="fa-solid fa-book text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-pencil', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-pencil text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-calculator', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-calculator text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-hands-clapping', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-hands-clapping text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-palette', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-palette text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-apple-whole', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-apple-whole text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-music', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-music text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-puzzle-piece', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-puzzle-piece text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-spa', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-spa text-lg"></i></button>
+            <button type="button" onclick="selectAgendaIcon('fa-bell', this)" class="icon-btn p-3 border rounded-xl hover:bg-emerald-50 text-slate-700 text-center"><i class="fa-solid fa-bell text-lg"></i></button>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-3">
+          <button type="button" onclick="closeAgendaModal()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow">Guardar Tarea</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Registrar Ficha PPI -->
+  <div id="modalPPI" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-id-card text-sky-600"></i> Registrar Ficha PPI
+        </h3>
+        <button onclick="closePPIModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <form id="ppiForm" onsubmit="handleCreatePPI(event)" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="ppiStudentName" class="block text-xs font-bold text-slate-700 mb-1">Nombre del Alumno:</label>
+            <input type="text" id="ppiStudentName" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ej: Mateo González">
+          </div>
+          <div>
+            <label for="ppiGrade" class="block text-xs font-bold text-slate-700 mb-1">Grado / Nivel Escolar:</label>
+            <input type="text" id="ppiGrade" required class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ej: 4° Grado Primaria">
+          </div>
+        </div>
+
+        <div>
+          <label for="ppiBarriers" class="block text-xs font-bold text-slate-700 mb-1">Barreras Identificadas:</label>
+          <textarea id="ppiBarriers" rows="2" class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ej: Explicaciones verbales muy extensas, fatiga visual..."></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Apoyos Acordados:</label>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="ppiCheckSupport" value="Lectura Fácil" class="rounded text-sky-600"> Lectura Fácil
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="ppiCheckSupport" value="Apoyo Visual" class="rounded text-sky-600"> Pictogramas / Visual
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="ppiCheckSupport" value="Tiempo Flex" class="rounded text-sky-600"> Tiempo Flexible
+            </label>
+            <label class="flex items-center gap-2 p-2 border rounded-lg bg-slate-50">
+              <input type="checkbox" name="ppiCheckSupport" value="Audio/TTS" class="rounded text-sky-600"> Sintetizador de Voz
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label for="ppiNotes" class="block text-xs font-bold text-slate-700 mb-1">Adecuación Evaluativa para Docentes:</label>
+          <textarea id="ppiNotes" rows="2" class="w-full p-2.5 border border-slate-300 rounded-xl text-sm outline-none focus:ring-2 focus:ring-sky-500" placeholder="Ej: Permitir exención de copiado de consignas largas..."></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closePPIModal()" class="px-4 py-2 border rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold shadow">Guardar Ficha</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Gestionar y Eliminar Estudiantes Duplicados -->
+  <div id="modalManageStudents" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 max-h-[85vh] flex flex-col">
+      <div class="flex justify-between items-center mb-4 border-b pb-2">
+        <div>
+          <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-brand-600"></i> Gestión y Limpieza de Alumnos
+          </h3>
+          <p class="text-xs text-slate-500">Lista de estudiantes registrados. Puedes eliminar los registros duplicados de forma sencilla.</p>
+        </div>
+        <button onclick="closeManageStudentsModal()" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+      </div>
+
+      <div id="manageStudentsListContainer" class="flex-grow overflow-y-auto space-y-2 pr-1 my-2">
+        <!-- Generado dinámicamente -->
+      </div>
+
+      <div class="flex justify-end pt-3 border-t">
+        <button type="button" onclick="closeManageStudentsModal()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- INTEGRACIÓN CON FIREBASE Y LÓGICA DE LA PLATAFORMA JS    -->
+  <!-- ======================================================== -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInAnonymously, 
+      signInWithCustomToken, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      addDoc, 
+      updateDoc, 
+      deleteDoc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Configuración Segura Firebase
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'inclusidai-red-app';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+      ? JSON.parse(__firebase_config) 
+      : {
+          apiKey: "demo-api-key",
+          authDomain: "demo-project.firebaseapp.com",
+          projectId: "demo-project",
+          storageBucket: "demo-project.appspot.com",
+          messagingSenderId: "123456789",
+          appId: "1:123456789:web:demo"
+        };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // ESTADO GLOBAL DE LA APLICACIÓN
+    let currentUser = null;
+    let currentRole = 'dai'; // 'dai', 'profesor', 'estudiante'
+    let activeStudentId = 'ALL';
+    let globalStudentsList = [];
+    let activeStudentObj = null;
+
+    let selectedAgendaIcon = 'fa-book';
+    let currentFilterCategory = 'todos';
+
+    // Manejador de listeners para evitar duplicidad
+    let activeUnsubscribers = [];
+
+    // Colecciones estricta RULE 1
+    const studentsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'estudiantes');
+    const postsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'cuaderno_posts');
+    const agendaCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'agenda_items');
+    const ppiCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'ppi_sheets');
+
+    // Inicialización de Autenticación RULE 3
+    async function initAuth() {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        console.warn("Autenticación Firebase en contingencia:", err);
+      }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      const tag = document.getElementById('userStatusTag');
+      if (user) {
+        tag.textContent = `ID: ${user.uid.substring(0, 6)}...`;
+        tag.title = `ID Autenticado: ${user.uid}`;
+        subscribeToStudents();
+        subscribeToMainData();
+      } else {
+        tag.textContent = `Sin Conexión`;
+      }
+    });
+
+    // Desuscripción Limpia Anti-Duplicados
+    function unsubscribeAll() {
+      activeUnsubscribers.forEach(unsub => {
+        if (typeof unsub === 'function') unsub();
+      });
+      activeUnsubscribers = [];
+    }
+
+    // Generador de ID Único Automático para Alumnos (ej. EST-4829)
+    function generateStudentId() {
+      const num = Math.floor(1000 + Math.random() * 9000);
+      return `EST-${num}`;
+    }
+
+    /* ==========================================
+       GESTIÓN DE ESTUDIANTES EN TIEMPO REAL
+       ========================================== */
+    function subscribeToStudents() {
+      if (!currentUser) return;
+
+      const unsub = onSnapshot(studentsCollectionRef, (snapshot) => {
+        const studentMap = new Map();
+        snapshot.forEach(docSnap => {
+          const data = docSnap.data();
+          const uniqueCode = data.studentCode || `EST-${docSnap.id.substring(0, 4).toUpperCase()}`;
+          // Garantizar registro por ID único de Firestore / studentCode
+          studentMap.set(docSnap.id, { 
+            id: docSnap.id, 
+            studentCode: uniqueCode,
+            ...data 
+          });
+        });
+        
+        globalStudentsList = Array.from(studentMap.values());
+        // Ordenar en memoria JS por nombre
+        globalStudentsList.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        updateStudentSelectorsUI();
+        renderManageStudentsList();
+      }, (err) => console.error("Error al escuchar estudiantes:", err));
+
+      activeUnsubscribers.push(unsub);
+    }
+
+    function updateStudentSelectorsUI() {
+      const topSelect = document.getElementById('globalStudentSelector');
+      const postSelect = document.getElementById('postStudentTarget');
+
+      const currentVal = topSelect.value;
+      const currentPostVal = postSelect.value;
+
+      topSelect.innerHTML = `<option value="ALL">🌐 Todos los Alumnos</option>`;
+      postSelect.innerHTML = `<option value="ALL">🌐 Todos los Alumnos</option>`;
+
+      // Uso de Set para evitar cualquier entrada duplicada por ID en los dropdowns
+      const seenIds = new Set();
+
+      globalStudentsList.forEach(st => {
+        if (seenIds.has(st.id)) return;
+        seenIds.add(st.id);
+
+        const codeDisplay = st.studentCode || `EST-${st.id.slice(0, 4).toUpperCase()}`;
+        const opt = document.createElement('option');
+        opt.value = st.id;
+        opt.textContent = `${st.name} ${st.lastName} (${st.grade || 'S/G'}) • ID: ${codeDisplay}`;
+
+        const opt2 = opt.cloneNode(true);
+        topSelect.appendChild(opt);
+        postSelect.appendChild(opt2);
+      });
+
+      if (currentVal && Array.from(topSelect.options).some(o => o.value === currentVal)) {
+        topSelect.value = currentVal;
+      }
+      if (currentPostVal && Array.from(postSelect.options).some(o => o.value === currentPostVal)) {
+        postSelect.value = currentPostVal;
+      }
+
+      updateActiveStudentBanner();
+    }
+
+    window.switchActiveStudent = function(studentId) {
+      activeStudentId = studentId;
+      updateActiveStudentBanner();
+      // Re-filtrar datos locales
+      renderAllViews();
+      showToast(studentId === 'ALL' ? "Mostrando todos los alumnos" : "Alumno filtrado en tiempo real");
+    };
+
+    function updateActiveStudentBanner() {
+      const tag = document.getElementById('activeStudentTag');
+      const gradeTag = document.getElementById('activeStudentGradeTag');
+
+      if (activeStudentId === 'ALL') {
+        activeStudentObj = null;
+        tag.textContent = "🌐 Todos los Alumnos";
+        gradeTag.textContent = "General";
+      } else {
+        activeStudentObj = globalStudentsList.find(s => s.id === activeStudentId);
+        if (activeStudentObj) {
+          const codeDisplay = activeStudentObj.studentCode || `EST-${activeStudentObj.id.slice(0, 4).toUpperCase()}`;
+          tag.textContent = `${activeStudentObj.name} ${activeStudentObj.lastName} [${codeDisplay}]`;
+          gradeTag.textContent = activeStudentObj.grade || 'Sin curso';
+        }
+      }
+    }
+
+    window.handleCreateStudent = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const name = document.getElementById('studentFirstName').value.trim();
+      const lastName = document.getElementById('studentLastName').value.trim();
+      const grade = document.getElementById('studentGrade').value.trim();
+      const shift = document.getElementById('studentShift').value;
+
+      // Validación Anti-Duplicados: Verificar si ya existe un alumno con el mismo Nombre y Apellido (case-insensitive)
+      const fullNameTarget = `${name} ${lastName}`.toLowerCase().replace(/\s+/g, ' ');
+      const existingStudent = globalStudentsList.find(s => {
+        const fullNameCurr = `${s.name} ${s.lastName}`.toLowerCase().replace(/\s+/g, ' ');
+        return fullNameCurr === fullNameTarget;
+      });
+
+      if (existingStudent) {
+        const existingCode = existingStudent.studentCode || `EST-${existingStudent.id.substring(0, 4).toUpperCase()}`;
+        showToast(`⚠️ "${name} ${lastName}" ya está registrado (ID: ${existingCode}).`, true);
+        return;
+      }
+
+      const supports = [];
+      document.querySelectorAll('input[name="studentSupportCheck"]:checked').forEach(cb => {
+        supports.push(cb.value);
+      });
+
+      const studentCode = generateStudentId();
+
+      try {
+        const docRef = await addDoc(studentsCollectionRef, {
+          name,
+          lastName,
+          grade,
+          shift,
+          supports,
+          studentCode,
+          createdAt: Date.now()
+        });
+
+        // Crear automáticamente la Ficha PPI base con el ID del estudiante
+        await addDoc(ppiCollectionRef, {
+          studentId: docRef.id,
+          studentCode,
+          name: `${name} ${lastName}`,
+          grade: grade,
+          barriers: "Registro inicial de barreras del entorno...",
+          supports: supports,
+          notes: "Atención personalizada mediante apoyos DUA.",
+          createdAt: Date.now()
+        });
+
+        closeStudentModal();
+        document.getElementById('studentForm').reset();
+        showToast(`Estudiante ${name} registrado con ID: ${studentCode}`);
+      } catch (err) {
+        console.error("Error al crear estudiante:", err);
+        showToast("Error al guardar estudiante", true);
+      }
+    };
+
+    window.openStudentModal = function() {
+      document.getElementById('modalStudent').classList.remove('hidden');
+    };
+    window.closeStudentModal = function() {
+      document.getElementById('modalStudent').classList.add('hidden');
+    };
+
+    // Funciones de Gestión y Eliminación de Alumnos (Limpieza de duplicados acumulados)
+    window.openManageStudentsModal = function() {
+      renderManageStudentsList();
+      document.getElementById('modalManageStudents').classList.remove('hidden');
+    };
+
+    window.closeManageStudentsModal = function() {
+      document.getElementById('modalManageStudents').classList.add('hidden');
+    };
+
+    function renderManageStudentsList() {
+      const container = document.getElementById('manageStudentsListContainer');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      if (globalStudentsList.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-6 text-slate-400 text-xs font-semibold">
+            No hay alumnos registrados actualmente.
+          </div>`;
+        return;
+      }
+
+      globalStudentsList.forEach(st => {
+        const codeDisplay = st.studentCode || `EST-${st.id.slice(0, 4).toUpperCase()}`;
+        const item = document.createElement('div');
+        item.className = "p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between gap-2 hover:bg-white transition";
+        item.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-brand-100 text-brand-700 font-black text-xs flex items-center justify-center">
+              ${st.name ? st.name.charAt(0).toUpperCase() : 'A'}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <strong class="text-xs text-slate-800 font-bold">${escapeHTML(st.name)} ${escapeHTML(st.lastName)}</strong>
+                <span class="bg-brand-700 text-white font-mono text-[10px] font-bold px-1.5 py-0.2 rounded">${codeDisplay}</span>
+              </div>
+              <span class="text-[11px] text-slate-500 font-medium">${escapeHTML(st.grade || 'Sin Grado')} • ${escapeHTML(st.shift || 'Turno N/A')}</span>
+            </div>
+          </div>
+          <button onclick="deleteStudent('${st.id}', '${escapeForVoice(st.name)}')" class="px-2.5 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold border border-red-200 flex items-center gap-1 transition" title="Eliminar registro de alumno">
+            <i class="fa-solid fa-trash-can"></i> <span class="hidden sm:inline">Eliminar</span>
+          </button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    window.deleteStudent = async function(studentId, studentName) {
+      if (!currentUser) return;
+      try {
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'estudiantes', studentId);
+        await deleteDoc(docRef);
+        
+        if (activeStudentId === studentId) {
+          switchActiveStudent('ALL');
+        }
+        
+        showToast(`Registro de ${studentName} eliminado correctamente`);
+      } catch (err) {
+        console.error("Error al eliminar estudiante:", err);
+        showToast("Error al eliminar el estudiante", true);
+      }
+    };
+
+    /* ==========================================
+       SUSCRIPCIÓN A DATOS DE LA RED
+       ========================================== */
+    let cachePosts = [];
+    let cacheAgenda = [];
+    let cachePPI = [];
+
+    function subscribeToMainData() {
+      if (!currentUser) return;
+
+      // Listeners en tiempo real
+      const unsub1 = onSnapshot(postsCollectionRef, (snapshot) => {
+        cachePosts = [];
+        snapshot.forEach(docSnap => cachePosts.push({ id: docSnap.id, ...docSnap.data() }));
+        cachePosts.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+        renderPostsWall();
+      }, (err) => console.error("Error posts:", err));
+
+      const unsub2 = onSnapshot(agendaCollectionRef, (snapshot) => {
+        cacheAgenda = [];
+        snapshot.forEach(docSnap => cacheAgenda.push({ id: docSnap.id, ...docSnap.data() }));
+        cacheAgenda.sort((a, b) => (a.order || 0) - (b.order || 0));
+        renderAgendaGrid();
+      }, (err) => console.error("Error agenda:", err));
+
+      const unsub3 = onSnapshot(ppiCollectionRef, (snapshot) => {
+        cachePPI = [];
+        snapshot.forEach(docSnap => cachePPI.push({ id: docSnap.id, ...docSnap.data() }));
+        renderPPIGrid();
+      }, (err) => console.error("Error PPI:", err));
+
+      activeUnsubscribers.push(unsub1, unsub2, unsub3);
+    }
+
+    function renderAllViews() {
+      renderPostsWall();
+      renderAgendaGrid();
+      renderPPIGrid();
+    }
+
+
+    /* ==========================================
+       CUADERNO DE ENLACE DIGITAL (MURO)
+       ========================================== */
+    function renderPostsWall() {
+      const container = document.getElementById('postsWallContainer');
+      const countTag = document.getElementById('postsCountTag');
+      container.innerHTML = '';
+
+      let filtered = cachePosts;
+
+      // Filtrar por Alumno Activo
+      if (activeStudentId !== 'ALL') {
+        filtered = filtered.filter(p => p.studentTargetId === activeStudentId || p.studentTargetId === 'ALL');
+      }
+
+      // Filtrar por Categoría
+      if (currentFilterCategory !== 'todos') {
+        filtered = filtered.filter(p => p.category === currentFilterCategory);
+      }
+
+      countTag.textContent = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-white rounded-2xl border border-slate-200">
+            <i class="fa-solid fa-comments text-4xl text-slate-300 mb-2"></i>
+            <p class="text-sm font-semibold text-slate-600">No hay notas publicadas para esta selección.</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(post => {
+        const card = document.createElement('div');
+        const isHigh = post.importance === 'alta';
+        const borderClass = isHigh ? 'border-2 border-amber-400 bg-amber-50/20' : 'border border-slate-200 bg-white';
+        const reactions = post.reactions || { understood: 0, completed: 0, help: 0 };
+
+        card.className = `p-5 rounded-2xl ${borderClass} shadow-sm transition hover:shadow-md space-y-3`;
+        
+        card.innerHTML = `
+          <div class="flex justify-between items-start gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${getCategoryBadgeStyle(post.category)}">
+                ${post.category}
+              </span>
+              ${isHigh ? '<span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md"><i class="fa-solid fa-triangle-exclamation"></i> Relevante</span>' : ''}
+            </div>
+            <span class="text-xs text-slate-400 font-medium">${formatDate(post.createdAt)}</span>
+          </div>
+
+          <div class="text-xs text-slate-500 flex items-center gap-2 flex-wrap">
+            <strong class="text-slate-800 font-bold"><i class="fa-solid fa-user-circle"></i> ${post.authorName || 'Docente'}</strong>
+            <span>• Asignado a: <strong class="text-brand-700 font-bold">${post.studentTargetName || 'Todos los Alumnos'}</strong></span>
+          </div>
+
+          <p class="text-sm font-medium text-slate-800 leading-relaxed whitespace-pre-line bg-slate-50 p-3 rounded-xl border border-slate-100">
+            ${escapeHTML(post.content)}
+          </p>
+
+          <div class="flex flex-wrap justify-between items-center gap-2 pt-2 border-t border-slate-100">
+            <button onclick="speakText('${escapeForVoice(post.content)}')" class="px-3 py-1.5 bg-brand-50 hover:bg-brand-100 text-brand-700 rounded-xl text-xs font-bold flex items-center gap-1.5">
+              <i class="fa-solid fa-volume-high"></i> Escuchar Mensaje
+            </button>
+
+            <div class="flex items-center gap-1.5">
+              <button onclick="reactToPost('${post.id}', 'understood')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1">
+                <span>👍 Entendido</span>
+                <span class="bg-white px-1.5 py-0.2 rounded-md border text-[10px] font-black">${reactions.understood}</span>
+              </button>
+
+              <button onclick="reactToPost('${post.id}', 'completed')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1">
+                <span>✅ Hecho</span>
+                <span class="bg-white px-1.5 py-0.2 rounded-md border text-[10px] font-black">${reactions.completed}</span>
+              </button>
+
+              <button onclick="reactToPost('${post.id}', 'help')" class="px-2.5 py-1.5 bg-slate-100 hover:bg-amber-50 hover:text-amber-700 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1">
+                <span>🙋‍♂️ Ayuda</span>
+                <span class="bg-white px-1.5 py-0.2 rounded-md border text-[10px] font-black">${reactions.help}</span>
+              </button>
+
+              ${currentRole === 'dai' ? `
+                <button onclick="deletePost('${post.id}')" class="text-slate-300 hover:text-red-500 p-1.5 ml-1" title="Eliminar"><i class="fa-solid fa-trash text-xs"></i></button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    window.filterWallPosts = function(cat) {
+      currentFilterCategory = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = "filter-btn px-3 py-1 rounded-xl bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200";
+      });
+      event.currentTarget.className = "filter-btn px-3 py-1 rounded-xl bg-slate-800 text-white font-bold shadow-sm";
+      renderPostsWall();
+    };
+
+    function getCategoryBadgeStyle(cat) {
+      switch(cat) {
+        case 'Lectura Fácil': return 'bg-purple-100 text-purple-800';
+        case 'Tareas': return 'bg-blue-100 text-blue-800';
+        case 'Observación': return 'bg-emerald-100 text-emerald-800';
+        case 'Apoyo PPI': return 'bg-amber-100 text-amber-900';
+        default: return 'bg-slate-100 text-slate-800';
+      }
+    }
+
+    window.handleCreatePost = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const category = document.getElementById('postCategory').value;
+      const targetId = document.getElementById('postStudentTarget').value;
+      const importance = document.getElementById('postImportance').value;
+      const content = document.getElementById('postContent').value.trim();
+
+      if (!content) return;
+
+      let targetName = "Todos los Alumnos";
+      if (targetId !== 'ALL') {
+        const found = globalStudentsList.find(s => s.id === targetId);
+        if (found) targetName = `${found.name} ${found.lastName}`;
+      }
+
+      try {
+        await addDoc(postsCollectionRef, {
+          category,
+          studentTargetId: targetId,
+          studentTargetName: targetName,
+          importance,
+          content,
+          authorName: getRoleAuthorName(),
+          createdAt: Date.now(),
+          reactions: { understood: 0, completed: 0, help: 0 }
+        });
+
+        document.getElementById('postContent').value = '';
+        showToast("Publicación guardada en tiempo real");
+      } catch (err) {
+        console.error("Error al crear post:", err);
+      }
+    };
+
+    window.reactToPost = async function(postId, reactionType) {
+      if (!currentUser) return;
+      const post = cachePosts.find(p => p.id === postId);
+      if (!post) return;
+
+      const updatedReactions = { ...(post.reactions || { understood: 0, completed: 0, help: 0 }) };
+      updatedReactions[reactionType] = (updatedReactions[reactionType] || 0) + 1;
+
+      try {
+        const postDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'cuaderno_posts', postId);
+        await updateDoc(postDocRef, { reactions: updatedReactions });
+      } catch (err) {
+        console.error("Error al reaccionar:", err);
+      }
+    };
+
+    window.deletePost = async function(postId) {
+      if (!currentUser) return;
+      try {
+        const postDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'cuaderno_posts', postId);
+        await deleteDoc(postDocRef);
+        showToast("Nota eliminada");
+      } catch (err) {
+        console.error("Error al borrar nota:", err);
+      }
+    };
+
+
+    /* ==========================================
+       AGENDA VISUAL COMPARTIDA
+       ========================================== */
+    function renderAgendaGrid() {
+      const grid = document.getElementById('agendaItemsGrid');
+      const emptyState = document.getElementById('emptyAgendaState');
+      const progressBar = document.getElementById('agendaProgressBar');
+      const percentTag = document.getElementById('agendaProgressPercent');
+
+      grid.innerHTML = '';
+
+      let filtered = cacheAgenda;
+      if (activeStudentId !== 'ALL') {
+        filtered = filtered.filter(a => a.studentTargetId === activeStudentId || a.studentTargetId === 'ALL');
+      }
+
+      if (filtered.length === 0) {
+        emptyState.classList.remove('hidden');
+        progressBar.style.width = '0%';
+        percentTag.textContent = '0% Completado';
+        return;
+      } else {
+        emptyState.classList.add('hidden');
+      }
+
+      const completedCount = filtered.filter(i => i.status === 'completed').length;
+      const percentage = Math.round((completedCount / filtered.length) * 100);
+      progressBar.style.width = `${percentage}%`;
+      percentTag.textContent = `${percentage}% Completado (${completedCount}/${filtered.length})`;
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        let statusStyle = "border-slate-200 bg-white";
+        let statusTag = `<span class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-[10px] font-bold">Pendiente</span>`;
+
+        if (item.status === 'in-progress') {
+          statusStyle = "border-2 border-brand-500 bg-blue-50/50 shadow-md ring-2 ring-brand-200";
+          statusTag = `<span class="px-2 py-0.5 bg-brand-600 text-white rounded-full text-[10px] font-bold animate-pulse">En Curso</span>`;
+        } else if (item.status === 'completed') {
+          statusStyle = "border-2 border-emerald-400 bg-emerald-50/40 opacity-80";
+          statusTag = `<span class="px-2 py-0.5 bg-emerald-600 text-white rounded-full text-[10px] font-bold">Completado ✓</span>`;
+        }
+
+        card.className = `p-4 rounded-2xl border ${statusStyle} flex flex-col justify-between transition-all`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <div class="w-11 h-11 rounded-2xl bg-brand-600 text-white flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid ${item.icon}"></i>
+              </div>
+              ${statusTag}
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm">${escapeHTML(item.title)}</h4>
+            <p class="text-xs text-slate-500 font-medium mt-0.5"><i class="fa-solid fa-clock"></i> ${item.time || 'Horario Flexible'}</p>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <div class="flex gap-1">
+              <button onclick="updateAgendaStatus('${item.id}', 'pending')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold" title="Pendiente">⏳</button>
+              <button onclick="updateAgendaStatus('${item.id}', 'in-progress')" class="px-2 py-1 bg-brand-100 hover:bg-brand-200 text-brand-800 rounded-lg text-xs font-bold" title="En curso">▶️</button>
+              <button onclick="updateAgendaStatus('${item.id}', 'completed')" class="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded-lg text-xs font-bold" title="Completado">✓</button>
+            </div>
+            <button onclick="speakText('Actividad: ${escapeForVoice(item.title)}.')" class="text-slate-400 hover:text-brand-600">
+              <i class="fa-solid fa-volume-high text-xs"></i>
+            </button>
+            ${currentRole !== 'estudiante' ? `
+              <button onclick="deleteAgendaItem('${item.id}')" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-trash text-xs"></i></button>
+            ` : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    window.updateAgendaStatus = async function(id, status) {
+      if (!currentUser) return;
+      try {
+        const itemDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'agenda_items', id);
+        await updateDoc(itemDocRef, { status });
+      } catch (err) {
+        console.error("Error agenda status:", err);
+      }
+    };
+
+    window.handleCreateAgendaTask = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const title = document.getElementById('taskTitle').value.trim();
+      const time = document.getElementById('taskTime').value.trim();
+      if (!title) return;
+
+      try {
+        await addDoc(agendaCollectionRef, {
+          title,
+          time,
+          icon: selectedAgendaIcon,
+          studentTargetId: activeStudentId,
+          status: 'pending',
+          order: Date.now()
+        });
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskTime').value = '';
+        closeAgendaModal();
+        showToast("Actividad añadida a la agenda");
+      } catch (err) {
+        console.error("Error al crear tarea agenda:", err);
+      }
+    };
+
+    window.deleteAgendaItem = async function(id) {
+      if (!currentUser) return;
+      try {
+        const itemDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'agenda_items', id);
+        await deleteDoc(itemDocRef);
+      } catch (err) {
+        console.error("Error al borrar tarea:", err);
+      }
+    };
+
+    window.openAgendaModal = function() {
+      document.getElementById('modalAgendaTask').classList.remove('hidden');
+    };
+    window.closeAgendaModal = function() {
+      document.getElementById('modalAgendaTask').classList.add('hidden');
+    };
+    window.selectAgendaIcon = function(iconClass, btnElem) {
+      selectedAgendaIcon = iconClass;
+      document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('border-emerald-500', 'bg-emerald-50'));
+      btnElem.classList.add('border-emerald-500', 'bg-emerald-50');
+    };
+
+
+    /* ==========================================
+       ADAPTADOR DE LECTURA FÁCIL
+       ========================================== */
+    window.runAdaptation = function(mode) {
+      const input = document.getElementById('adaptInputText').value.trim();
+      const output = document.getElementById('adaptOutputArea');
+
+      if (!input) {
+        showToast("Ingresa un texto primero.", true);
+        return;
+      }
+
+      let res = '';
+      if (mode === 'steps') {
+        const sentences = input.split(/(?<=[.?!])\s+/).filter(s => s.trim().length > 0);
+        res = `<strong class="text-brand-700 block mb-2">📋 PASOS DE LA ACTIVIDAD:</strong><ol class="list-decimal pl-5 space-y-1.5">`;
+        sentences.forEach(s => res += `<li class="p-2 bg-slate-50 border border-slate-200 rounded-lg">${s}</li>`);
+        res += `</ol>`;
+      } else if (mode === 'vocab') {
+        let text = input.replace(/mediante/gi, "usando")
+                        .replace(/posteriormente/gi, "después")
+                        .replace(/fundamental/gi, "muy importante");
+        res = `<p class="leading-relaxed font-medium text-slate-800">${text}</p>`;
+      } else if (mode === 'verbs') {
+        const verbs = ["lee", "escribe", "responde", "calcula", "dibuja", "observa", "escucha"];
+        let textHigh = input;
+        verbs.forEach(v => {
+          const reg = new RegExp(`\\b(${v})\\b`, 'gi');
+          textHigh = textHigh.replace(reg, `<strong class="bg-amber-200 px-1 rounded border border-amber-300 text-amber-950">$1</strong>`);
+        });
+        res = `<p class="leading-relaxed">${textHigh}</p>`;
+      } else if (mode === 'simple') {
+        res = `<p class="leading-relaxed font-semibold text-slate-800">${input.replace(/\./g, '.<br/><br/>• ')}</p>`;
+      }
+
+      output.innerHTML = res;
+      showToast("Texto adaptado listo");
+    };
+
+    window.sendAdaptedToPost = function() {
+      const text = document.getElementById('adaptOutputArea').innerText;
+      if (!text) return;
+      document.getElementById('postContent').value = text;
+      document.getElementById('postCategory').value = 'Lectura Fácil';
+      switchTab('muro');
+      showToast("Consigna adaptada cargada en el editor de publicación");
+    };
+
+
+    /* ==========================================
+       RED DE APOYOS Y FICHAS PPI COMPARTIDAS
+       ========================================== */
+    function renderPPIGrid() {
+      const grid = document.getElementById('ppiCardsGrid');
+      grid.innerHTML = '';
+
+      let filtered = cachePPI;
+      if (activeStudentId !== 'ALL') {
+        filtered = filtered.filter(p => p.studentId === activeStudentId);
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-10 text-slate-400">
+            <i class="fa-solid fa-users-slash text-3xl mb-2"></i>
+            <p class="text-sm">No hay fichas PPI registradas para esta selección.</p>
+          </div>`;
+        return;
+      }
+
+      filtered.forEach(student => {
+        const card = document.createElement('div');
+        card.className = "bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-3";
+        
+        let tagsHTML = '';
+        (student.supports || []).forEach(sup => {
+          tagsHTML += `<span class="px-2 py-0.5 bg-sky-50 text-sky-800 border border-sky-200 rounded-md text-[11px] font-bold">${sup}</span>`;
+        });
+
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h3 class="font-bold text-slate-800 text-base">${escapeHTML(student.name)}</h3>
+                <span class="text-xs font-semibold text-sky-600">${escapeHTML(student.grade)}</span>
+              </div>
+              ${currentRole === 'dai' ? `
+                <button onclick="deletePPI('${student.id}')" class="text-slate-300 hover:text-red-500"><i class="fa-solid fa-trash text-xs"></i></button>
+              ` : ''}
+            </div>
+
+            <div class="space-y-2 text-xs my-2">
+              <div>
+                <span class="font-bold text-slate-400 uppercase tracking-wider block">Barreras Identificadas:</span>
+                <p class="text-slate-700 font-medium">${escapeHTML(student.barriers || 'No especificadas')}</p>
+              </div>
+              <div>
+                <span class="font-bold text-slate-400 uppercase tracking-wider block mb-1">Apoyos Acordados:</span>
+                <div class="flex flex-wrap gap-1">${tagsHTML}</div>
+              </div>
+              <div>
+                <span class="font-bold text-slate-400 uppercase tracking-wider block">Adecuación Evaluativa:</span>
+                <p class="text-slate-600 italic bg-slate-50 p-2 rounded-lg border border-slate-100">${escapeHTML(student.notes || 'Sin adecuación especial')}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex justify-end">
+            <button onclick="speakText('Estudiante ${escapeForVoice(student.name)}. Apoyos acordados: ${(student.supports || []).join(', ')}')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-volume-high text-sky-600"></i> Escuchar Ficha
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    window.handleCreatePPI = async function(e) {
+      e.preventDefault();
+      if (!currentUser) return;
+
+      const name = document.getElementById('ppiStudentName').value.trim();
+      const grade = document.getElementById('ppiGrade').value.trim();
+      const barriers = document.getElementById('ppiBarriers').value.trim();
+      const notes = document.getElementById('ppiNotes').value.trim();
+
+      const supports = [];
+      document.querySelectorAll('input[name="ppiCheckSupport"]:checked').forEach(cb => {
+        supports.push(cb.value);
+      });
+
+      try {
+        await addDoc(ppiCollectionRef, {
+          name,
+          grade,
+          barriers,
+          supports,
+          notes,
+          studentId: activeStudentId !== 'ALL' ? activeStudentId : '',
+          createdAt: Date.now()
+        });
+        closePPIModal();
+        showToast("Ficha PPI guardada en la Red");
+      } catch (err) {
+        console.error("Error al crear PPI:", err);
+      }
+    };
+
+    window.deletePPI = async function(id) {
+      if (!currentUser) return;
+      try {
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ppi_sheets', id);
+        await deleteDoc(docRef);
+        showToast("Ficha eliminada");
+      } catch (err) {
+        console.error("Error borrar PPI:", err);
+      }
+    };
+
+    window.openPPIModal = function() {
+      document.getElementById('modalPPI').classList.remove('hidden');
+    };
+    window.closePPIModal = function() {
+      document.getElementById('modalPPI').classList.add('hidden');
+    };
+
+
+    /* ==========================================
+       PAUSA ACTIVA Y TEMPORIZADOR SENSORIAL
+       ========================================== */
+    let sensorySeconds = 180;
+    let sensoryInterval = null;
+    let isSensoryRunning = false;
+
+    window.setSensoryPreset = function(mins) {
+      sensorySeconds = mins * 60;
+      updateSensoryDisplay();
+    };
+
+    function updateSensoryDisplay() {
+      const m = Math.floor(sensorySeconds / 60).toString().padStart(2, '0');
+      const s = (sensorySeconds % 60).toString().padStart(2, '0');
+      document.getElementById('sensoryTimerDisplay').textContent = `${m}:${s}`;
+    }
+
+    window.toggleSensoryTimer = function() {
+      const btn = document.getElementById('btnStartSensory');
+      const circle = document.getElementById('sensoryCircle');
+
+      if (isSensoryRunning) {
+        clearInterval(sensoryInterval);
+        isSensoryRunning = false;
+        btn.innerHTML = `<i class="fa-solid fa-play"></i> Continuar`;
+        circle.classList.remove('animate-breathing');
+      } else {
+        isSensoryRunning = true;
+        btn.innerHTML = `<i class="fa-solid fa-pause"></i> Pausar`;
+        circle.classList.add('animate-breathing');
+
+        sensoryInterval = setInterval(() => {
+          if (sensorySeconds > 0) {
+            sensorySeconds--;
+            updateSensoryDisplay();
+          } else {
+            clearInterval(sensoryInterval);
+            isSensoryRunning = false;
+            btn.innerHTML = `<i class="fa-solid fa-play"></i> Iniciar Pausa`;
+            circle.classList.remove('animate-breathing');
+            playChimeSound();
+            showToast("¡Pausa activa finalizada!");
+          }
+        }, 1000);
+      }
+    };
+
+    window.resetSensoryTimer = function() {
+      clearInterval(sensoryInterval);
+      isSensoryRunning = false;
+      sensorySeconds = 180;
+      updateSensoryDisplay();
+      document.getElementById('btnStartSensory').innerHTML = `<i class="fa-solid fa-play"></i> Iniciar Pausa`;
+      document.getElementById('sensoryCircle').classList.remove('animate-breathing');
+    };
+
+    // Tono Suave mediante Web Audio API
+    function playChimeSound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.5);
+      } catch (err) {
+        console.warn("AudioContext no activado:", err);
+      }
+    }
+
+
+    /* ==========================================
+       ROLES Y ACCESIBILIDAD
+       ========================================== */
+    window.switchRole = function(role) {
+      currentRole = role;
+      const bannerTitle = document.getElementById('roleBannerTitle');
+      const badgeIcon = document.getElementById('roleBadgeIcon');
+      const teacherPublishPanel = document.getElementById('teacherPublishPanel');
+      const btnAddAgenda = document.getElementById('btnAddAgendaTaskBtn');
+      const btnCreatePPI = document.getElementById('btnCreatePPISheet');
+      const btnOpenAddStudent = document.getElementById('btnOpenAddStudent');
+
+      if (role === 'dai') {
+        bannerTitle.textContent = 'Docente DAI - Control de Adecuaciones, Gestión de Alumnos y PPI';
+        badgeIcon.className = 'w-10 h-10 rounded-2xl bg-sky-600 text-white flex items-center justify-center font-bold text-lg shadow';
+        badgeIcon.innerHTML = `<i class="fa-solid fa-user-tie"></i>`;
+        teacherPublishPanel.classList.remove('hidden');
+        btnAddAgenda.classList.remove('hidden');
+        btnCreatePPI.classList.remove('hidden');
+        btnOpenAddStudent.classList.remove('hidden');
+      } else if (role === 'profesor') {
+        bannerTitle.textContent = 'Profesor/a de Materia - Consultas de PPI y Anotaciones Diarias';
+        badgeIcon.className = 'w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-bold text-lg shadow';
+        badgeIcon.innerHTML = `<i class="fa-solid fa-chalkboard-user"></i>`;
+        teacherPublishPanel.classList.remove('hidden');
+        btnAddAgenda.classList.remove('hidden');
+        btnCreatePPI.classList.add('hidden');
+        btnOpenAddStudent.classList.add('hidden');
+      } else if (role === 'estudiante') {
+        bannerTitle.textContent = 'Estudiante / Familia - Vista Interactiva Accesible con Reacciones';
+        badgeIcon.className = 'w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg shadow';
+        badgeIcon.innerHTML = `<i class="fa-solid fa-graduation-cap"></i>`;
+        teacherPublishPanel.classList.add('hidden');
+        btnAddAgenda.classList.add('hidden');
+        btnCreatePPI.classList.add('hidden');
+        btnOpenAddStudent.classList.add('hidden');
+      }
+
+      renderAllViews();
+      showToast(`Rol activo: ${role.toUpperCase()}`);
+    };
+
+    function getRoleAuthorName() {
+      if (currentRole === 'dai') return 'Lic. Clara (DAI)';
+      if (currentRole === 'profesor') return 'Prof. de Materia';
+      return 'Familia / Alumno';
+    }
+
+    // TTS Sintetizador de Voz
+    let synth = window.speechSynthesis;
+
+    function populateVoices() {
+      if (!synth) return;
+      const voices = synth.getVoices();
+      const voiceSelect = document.getElementById('voiceSelect');
+      voiceSelect.innerHTML = '';
+
+      const spanishVoices = voices.filter(v => v.lang.includes('es'));
+      const listToUse = spanishVoices.length > 0 ? spanishVoices : voices;
+
+      listToUse.forEach((voice, index) => {
+        const option = document.createElement('option');
+        option.textContent = `${voice.name} (${voice.lang})`;
+        option.setAttribute('data-name', voice.name);
+        if (index === 0) option.selected = true;
+        voiceSelect.appendChild(option);
+      });
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = populateVoices;
+    }
+    populateVoices();
+
+    window.speakText = function(text) {
+      if (!synth) return;
+      stopSpeech();
+      if (!text || text.trim() === '') return;
+
+      const cleanText = text.replace(/<[^>]*>?/gm, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+
+      const voiceSelect = document.getElementById('voiceSelect');
+      const selectedName = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
+      const voices = synth.getVoices();
+      const chosen = voices.find(v => v.name === selectedName);
+      if (chosen) utterance.voice = chosen;
+
+      utterance.rate = 0.9;
+
+      utterance.onstart = () => document.getElementById('btnStopVoice').classList.remove('hidden');
+      utterance.onend = () => document.getElementById('btnStopVoice').classList.add('hidden');
+      utterance.onerror = () => document.getElementById('btnStopVoice').classList.add('hidden');
+
+      synth.speak(utterance);
+    };
+
+    window.stopSpeech = function() {
+      if (synth && synth.speaking) {
+        synth.cancel();
+        document.getElementById('btnStopVoice').classList.add('hidden');
+      }
+    };
+
+    window.setFontSize = function(size) {
+      document.body.classList.remove('font-size-sm', 'font-size-md', 'font-size-lg', 'font-size-xl');
+      document.body.classList.add(`font-size-${size}`);
+      showToast(`Tamaño de letra: ${size.toUpperCase()}`);
+    };
+
+    window.setTheme = function(theme) {
+      document.body.classList.remove('theme-normal', 'theme-dark-contrast', 'theme-yellow-contrast', 'theme-dyslexia');
+      document.body.classList.add(`theme-${theme}`);
+      showToast(`Tema visual: ${theme.toUpperCase()}`);
+    };
+
+    window.switchTab = function(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-brand-700', 'shadow-sm');
+        btn.classList.add('text-white', 'hover:bg-brand-700');
+      });
+
+      document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`tab-${tabId}`);
+      activeBtn.classList.add('bg-white', 'text-brand-700', 'shadow-sm');
+      activeBtn.classList.remove('text-white', 'hover:bg-brand-700');
+    };
+
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.textContent = msg;
+      toastIcon.className = isError 
+        ? 'fa-solid fa-circle-exclamation text-red-400 text-xl' 
+        : 'fa-solid fa-circle-check text-emerald-400 text-xl';
+
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return 'Reciente';
+      const d = new Date(timestamp);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + d.toLocaleDateString();
+    }
+
+    function escapeHTML(str) {
+      if (!str) return '';
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
+    }
+
+    function escapeForVoice(str) {
+      if (!str) return '';
+      return str.replace(/'/g, "\\'").replace(/"/g, '\\"').replace(/\n/g, ' ');
+    }
+
+    // Inicializar Autenticación y Listeners
+    initAuth();
+  </script>
+</body>
+</html>
